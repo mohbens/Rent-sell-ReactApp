@@ -1,35 +1,3 @@
-// import { getAuth, signInWithPopup } from "firebase/auth";
-// import { GoogleAuthProvider } from "firebase/auth/web-extension";
-// import React from "react";
-// import { FcGoogle } from "react-icons/fc";
-// import { toast } from "react-toastify";
-// import { useNavigate } from "react-router-dom";
-
-// export default function OAuth() {
-// 	const navigate = useNavigate();
-// 	async function onGoogleClick() {
-// 		try {
-// 			const auth = getAuth();
-// 			const provider = new GoogleAuthProvider();
-// 			const result = await signInWithPopup(auth, provider);
-// 			const user = result.user;
-// 			console.log(user);
-// 		} catch (error) {
-// 			toast.error("could not authorize with Google !");
-// 			console.log(error);
-// 		}
-// 	}
-// 	return (
-// 		<button
-// 			type="button"
-// 			onClick={onGoogleClick}
-// 			className="flex items-center justify-center w-full bg-red-600 text-white px-7 py-3 uppercase text-sm font-medium hover:bg-red-800 active:bg-red-900 shadow-md hover:shadow-lg transition duration-200 ease-in-out rounded">
-// 			<FcGoogle className="text-2xl bg-white rounded-full mr-2" />
-// 			Continue with Google
-// 		</button>
-// 	);
-// }
-
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc } from "firebase/firestore";
 import { FcGoogle } from "react-icons/fc";
