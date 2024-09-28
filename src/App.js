@@ -23,9 +23,13 @@ export default function App() {
 					</Route>
 					<Route path="/forgotPassword" element={<ForgotPassword />} />
 					<Route path="/offers" element={<Offers />} />
+
+					<Route path="/Create-listing" element={<PrivateRoute />}>
+						<Route path="/Create-listing" element={<CreateListing />} />
+					</Route>
+
 					<Route path="/sign-in" element={<SignIn />} />
 					<Route path="/sign-up" element={<SignUp />} />
-					<Route path="/Create-listing" element={<CreateListing />} />
 				</Routes>
 			</Router>
 			<ToastContainer
