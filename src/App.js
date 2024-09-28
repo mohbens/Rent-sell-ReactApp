@@ -10,6 +10,7 @@ import Header from "./components/Header";
 import { ToastContainer } from "react-toastify";
 
 import "react-toastify/dist/ReactToastify.css";
+import CreateListing from "./pages/CreateListing";
 export default function App() {
 	return (
 		<>
@@ -24,6 +25,7 @@ export default function App() {
 					<Route path="/offers" element={<Offers />} />
 					<Route path="/sign-in" element={<SignIn />} />
 					<Route path="/sign-up" element={<SignUp />} />
+					<Route path="/Create-listing" element={<CreateListing />} />
 				</Routes>
 			</Router>
 			<ToastContainer

@@ -1,6 +1,7 @@
 import { getAuth } from "firebase/auth";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { FcHome } from "react-icons/fc";
 
 export default function Profile() {
 	const auth = getAuth();
@@ -54,6 +55,16 @@ export default function Profile() {
 							</p>
 						</div>
 					</form>
+					<button
+						className=" w-full text-white bg-blue-600 uppercase px-7 py-3 text-sm shadow-sm hover:bg-blue-700 transition ease-in-out  hover:shadow-lg active:bg-blue-800  rounded"
+						type="submit">
+						<Link
+							to="/create-listing"
+							className=" flex justify-center items-center">
+							<FcHome className=" mr-2 text-3xl bg-red-200 rounded-full p-1 border-2" />
+							Sell or rent your home !
+						</Link>
+					</button>
 				</div>
 			</section>
 		</>
