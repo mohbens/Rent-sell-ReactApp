@@ -26,20 +26,42 @@ export default function CreateListing() {
 		regularPrice,
 		discountedPrice,
 	} = formData;
-	function onChange() {}
+	function onChange(e) {
+		let boolean = null;
+		if (e.target.value === "true") {
+			boolean = true;
+		}
+		if (e.target.value === "false") {
+			boolean = false;
+		}
+		// files
+		if (e.target.files) {
+			setFormData((prevState) => ({
+				...prevState,
+				images: e.target.files,
+			}));
+		}
+		// text/boolean/nums
+		if (!e.target.files) {
+			setFormData((prevState) => ({
+				...prevState,
+				[e.target.id]: boolean ?? e.target.value,
+			}));
+		}
+	}
 	return (
 		<main className="max-w-md px-2 mx-auto">
 			<h1 className="text-3xl text-center mt-6 font-bold">Create a Listing</h1>
 			<form>
 				<p className="text-lg mt-6 font-semibold">Sell / Rent</p>
-				<div className="flex ">
+				<div className="flex">
 					<button
 						type="button"
-						id="type "
-						value="sell"
+						id="type"
+						value="sale"
 						onClick={onChange}
-						className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition ease-in-out w-full mr-3 ${
-							type === "sale"
+						className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${
+							type === "rent"
 								? "bg-white text-black"
 								: "bg-slate-600 text-white"
 						}`}>
@@ -47,11 +69,11 @@ export default function CreateListing() {
 					</button>
 					<button
 						type="button"
-						id="type "
+						id="type"
 						value="rent"
 						onClick={onChange}
-						className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition ease-in-out w-full ml-3 ${
-							type === "rent"
+						className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition duration-150 ease-in-out w-full ${
+							type === "sale"
 								? "bg-white text-black"
 								: "bg-slate-600 text-white"
 						}`}>
@@ -90,7 +112,7 @@ export default function CreateListing() {
 						<p className="text-lg mt-6 font-semibold">Baths</p>
 						<input
 							type="number"
-							id="bath"
+							id="bathrooms"
 							value={bathrooms}
 							onChange={onChange}
 							min="1"
@@ -105,7 +127,7 @@ export default function CreateListing() {
 					<div className="flex ">
 						<button
 							type="button"
-							id="parking "
+							id="parking"
 							value={true}
 							onClick={onChange}
 							className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition ease-in-out w-full mr-3 ${
@@ -115,7 +137,7 @@ export default function CreateListing() {
 						</button>
 						<button
 							type="button"
-							id="parking "
+							id="parking"
 							value={false}
 							onClick={onChange}
 							className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition ease-in-out w-full ml-3 ${
@@ -130,7 +152,7 @@ export default function CreateListing() {
 							<button
 								type="button"
 								id="furnished"
-								value={false}
+								value={true}
 								onClick={onChange}
 								className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition ease-in-out w-full mr-3 ${
 									!furnished ? "bg-white text-black" : "bg-slate-600 text-white"
@@ -139,8 +161,8 @@ export default function CreateListing() {
 							</button>
 							<button
 								type="button"
-								id="furnished "
-								value={true}
+								id="furnished"
+								value={false}
 								onClick={onChange}
 								className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition ease-in-out w-full ml-3 ${
 									furnished ? "bg-white text-black" : "bg-slate-600 text-white"
@@ -154,10 +176,10 @@ export default function CreateListing() {
 					<p className="text-lg mt-6 font-semibold">Adress</p>
 					<textarea
 						type="text"
-						id="Adress"
+						id="adress"
 						value={adress}
 						onChange={onChange}
-						placeholder="Adress "
+						placeholder="Adress"
 						className="w-full px-4 py-2 text-xl text-gray-700 bg-white border border-gray-300 rounded  transition duration-150 ease-in-out focus:text-gray-700 focus:bg-white  focus:border-slate-600 mb-6"
 						required
 					/>
@@ -179,7 +201,7 @@ export default function CreateListing() {
 				<div className="flex mb-6">
 					<button
 						type="button"
-						id="offer "
+						id="offer"
 						value={true}
 						onClick={onChange}
 						className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition ease-in-out w-full mr-3 ${
@@ -189,7 +211,7 @@ export default function CreateListing() {
 					</button>
 					<button
 						type="button"
-						id="offer "
+						id="offer"
 						value={false}
 						onClick={onChange}
 						className={`px-7 py-3 font-medium text-sm uppercase shadow-md rounded hover:shadow-lg focus:shadow-lg active:shadow-lg transition ease-in-out w-full ml-3 ${
