@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
 import { toast } from "react-toastify";
 import {
@@ -9,7 +9,13 @@ import {
 } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { v4 as uuidv4 } from "uuid";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+	addDoc,
+	collection,
+	orderBy,
+	query,
+	serverTimestamp,
+} from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
 export default function CreateListing() {
@@ -180,6 +186,7 @@ export default function CreateListing() {
 	if (loading) {
 		return <Spinner />;
 	}
+
 	return (
 		<main className="max-w-md px-2 mx-auto">
 			<h1 className="text-3xl text-center mt-6 font-bold">Create a Listing</h1>
