@@ -17,8 +17,6 @@ export default function Header() {
 		});
 	}, [auth]);
 
-	console.log("abcd", location.pathname);
-
 	function pathMatchRoute(route) {
 		if (route === location.pathname) {
 			return true;
