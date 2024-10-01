@@ -16,6 +16,9 @@ import { db } from "../firebase";
 import { FcHome } from "react-icons/fc";
 import { useEffect } from "react";
 import ListingItem from "../components/ListingItem";
+import { FaTrash } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
+
 // import ListingItem from "../components/ListingItem";
 export default function Profile() {
 	const auth = getAuth();
@@ -58,6 +61,20 @@ export default function Profile() {
 		}
 		fetchUserListings();
 	}, [auth.currentUser.uid]);
+
+	async function onDelete(listingID) {
+		if (window.confirm("Are you sure you want to delete?")) {
+			await deleteDoc(doc(db, "listings", listingID));
+			const updatedListings = listings.filter(
+				(listing) => listing.id !== listingID
+			);
+			setListings(updatedListings);
+			toast.success("Successfully deleted the listing");
+		}
+	}
+	function onEdit(listingID) {
+		navigate(`/edit-listing/${listingID}`);
+	}
 	return (
 		<>
 			<section className="max-w-6xl mx-auto flex justify-center items-center flex-col">
@@ -114,6 +131,8 @@ export default function Profile() {
 									key={listings.id}
 									id={listings.id}
 									listing={listings.data}
+									onDelete={() => onDelete(listings.id)}
+									onEdit={() => onEdit(listings.id)}
 								/>
 							))}
 						</ul>
