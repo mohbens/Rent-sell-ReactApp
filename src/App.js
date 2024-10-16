@@ -8,7 +8,6 @@ import SignUp from "./pages/SignUp";
 import PrivateRoute from "./components/PrivateRoute";
 import Header from "./components/Header";
 import { ToastContainer } from "react-toastify";
-
 import "react-toastify/dist/ReactToastify.css";
 import CreateListing from "./pages/CreateListing";
 import EditListing from "./pages/EditListing";
@@ -20,6 +19,42 @@ export default function App() {
 			<Router>
 				<Header />
 				<Routes>
+					{/* Private */}
+					<Route element={<PrivateRoute />}>
+						<Route path="/profile" element={<Profile />} />
+						<Route path="/Create-listing" element={<CreateListing />} />
+						<Route path="/Edit-listing:listingId" element={<EditListing />} />
+					</Route>
+					{/* Public*/}
+					<Route path="/" element={<Home />} />
+					<Route path="/forgotPassword" element={<ForgotPassword />} />
+					<Route path="/offers" element={<Offers />} />
+					<Route path="/category/:categoryName" element={<Category />} />
+					<Route
+						path="/category/:categoryName/:listingId"
+						element={<Listing />}
+					/>
+					<Route path="/sign-in" element={<SignIn />} />
+					<Route path="/sign-up" element={<SignUp />} />
+				</Routes>
+			</Router>
+			<ToastContainer
+				position="top-right"
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+				theme="light"
+			/>
+		</>
+	);
+}
+{
+	/* 
 					<Route path="/" element={<Home />} />
 					<Route path="/profile" element={<PrivateRoute />}>
 						<Route path="/profile" element={<Profile />} />
@@ -41,21 +76,5 @@ export default function App() {
 					</Route>
 
 					<Route path="/sign-in" element={<SignIn />} />
-					<Route path="/sign-up" element={<SignUp />} />
-				</Routes>
-			</Router>
-			<ToastContainer
-				position="top-right"
-				autoClose={5000}
-				hideProgressBar={false}
-				newestOnTop={false}
-				closeOnClick
-				rtl={false}
-				pauseOnFocusLoss
-				draggable
-				pauseOnHover
-				theme="light"
-			/>
-		</>
-	);
+					<Route path="/sign-up" element={<SignUp />} /> */
 }
