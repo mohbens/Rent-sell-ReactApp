@@ -1,0 +1,46 @@
+import {
+	collection,
+	getDoc,
+	getDocs,
+	limit,
+	orderBy,
+	query,
+	where,
+} from "firebase/firestore";
+import { db } from "../firebase";
+import { useState } from "react";
+
+export async function FetchListings() {
+	const [lastFetchedListing, setLastFetchListing] = useState(null);
+	try {
+		return fetchOffers(["type", "==", "rent"]);
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+async function fetchOffers(criteria) {
+	try {
+		const listingRef = collection(db, "listings");
+		const q = query(
+			listingRef,
+			where(...criteria),
+			orderBy("timestamp", "desc"),
+			limit(8)
+		);
+		const querySnap = await getDocs(q);
+		const lastVisible = querySnap.docs[querySnap.docs.length - 1];
+		setLastFetchListing(lastVisible);
+		const listings = [];
+		querySnap.forEach((doc) => {
+			return listings.push({
+				id: doc.id,
+				data: doc.data(),
+			});
+		});
+		setListings(listings);
+		setLoading(false);
+	} catch (error) {
+		toast.error("Could not fetch listing");
+	}
+}

@@ -13,9 +13,11 @@ import CreateListing from "./pages/CreateListing";
 import EditListing from "./pages/EditListing";
 import Listing from "./pages/Listing";
 import Category from "./pages/category";
+import Loader from "./components/Loader";
 export default function App() {
 	return (
 		<>
+			<Loader />
 			<Router>
 				<Header />
 				<Routes>

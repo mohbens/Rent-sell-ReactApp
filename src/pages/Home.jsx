@@ -1,110 +1,55 @@
-import {
-	collection,
-	getDoc,
-	getDocs,
-	limit,
-	orderBy,
-	query,
-	where,
-} from "firebase/firestore";
+// import {
+// 	collection,
+// 	getDoc,
+// 	getDocs,
+// 	limit,
+// 	orderBy,
+// 	query,
+// 	where,
+// } from "firebase/firestore";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
 import Slider from "../components/Slider";
-import { db } from "../firebase";
+// import { db } from "../firebase";
+import * as client from "../Services/HomeService";
 
 export default function Home() {
 	// Offers
 	const [offerListings, setOfferListings] = useState(null);
-	useEffect(() => {
-		async function fetchListings() {
-			try {
-				// get reference
-				const listingsRef = collection(db, "listings");
-				// create the query
-				const q = query(
-					listingsRef,
-					where("offer", "==", true),
-					orderBy("timestamp", "desc"),
-					limit(4)
-				);
-				// execute the query
-				const querySnap = await getDocs(q);
-				const listings = [];
-				querySnap.forEach((doc) => {
-					return listings.push({
-						id: doc.id,
-						data: doc.data(),
-					});
-				});
-				setOfferListings(listings);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		fetchListings();
-	}, []);
-	// Places for rent
 	const [rentListings, setRentListings] = useState(null);
-	useEffect(() => {
-		async function fetchListings() {
-			try {
-				// get reference
-				const listingsRef = collection(db, "listings");
-				// create the query
-				const q = query(
-					listingsRef,
-					where("type", "==", "rent"),
-					orderBy("timestamp", "desc"),
-					limit(4)
-				);
-				// execute the query
-				const querySnap = await getDocs(q);
-				const listings = [];
-				querySnap.forEach((doc) => {
-					return listings.push({
-						id: doc.id,
-						data: doc.data(),
-					});
-				});
-				setRentListings(listings);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		fetchListings();
-	}, []);
-	// Places for rent
 	const [saleListings, setSaleListings] = useState(null);
+
 	useEffect(() => {
-		async function fetchListings() {
-			try {
-				// get reference
-				const listingsRef = collection(db, "listings");
-				// create the query
-				const q = query(
-					listingsRef,
-					where("type", "==", "sale"),
-					orderBy("timestamp", "desc"),
-					limit(4)
-				);
-				// execute the query
-				const querySnap = await getDocs(q);
-				const listings = [];
-				querySnap.forEach((doc) => {
-					return listings.push({
-						id: doc.id,
-						data: doc.data(),
-					});
-				});
-				setSaleListings(listings);
-			} catch (error) {
-				console.log(error);
-			}
-		}
-		fetchListings();
+		client.fetchOffers().then((list) => {
+			setOfferListings(list);
+		});
+		client.fetchRents().then((list) => {
+			setRentListings(list);
+		});
+
+		client.fetchSales().then((list) => {
+			setSaleListings(list);
+		});
+
+		// client.fetchListings1().then((list) => {
+		// 	setOfferListings(list);
+		// });
+
+		// setTimeout(() => {
+		// 	client.fetchListings2().then((list) => {
+		// 		setRentListings(list);
+		// 	});
+		// }, 1000);
+
+		// setTimeout(() => {
+		// 	client.fetchListings3().then((list) => {
+		// 		setSaleListings(list);
+		// 	});
+		// }, 2000);
 	}, []);
+
 	return (
 		<div>
 			<Slider />
