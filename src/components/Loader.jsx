@@ -7,7 +7,7 @@ export default function Loader() {
 	const ref = useRef(null);
 
 	useEffect(() => {
-		console.log(ref.current);
+		// console.log(ref.current);
 
 		function increaseNb() {
 			setNbRequests((prev) => prev + 1);
@@ -25,7 +25,7 @@ export default function Loader() {
 	}, []);
 
 	useEffect(() => {
-		console.log(nbRequests);
+		// console.log(nbRequests);
 	}, [nbRequests]);
 
 	return (

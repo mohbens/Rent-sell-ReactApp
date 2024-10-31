@@ -2,7 +2,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import ForgotPassword from "./pages/ForgotPassword";
-import Offers from "./pages/Offers";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import PrivateRoute from "./components/PrivateRoute";
@@ -14,6 +13,7 @@ import EditListing from "./pages/EditListing";
 import Listing from "./pages/Listing";
 import Category from "./pages/category";
 import Loader from "./components/Loader";
+import OffersP from "./pages/Offers";
 export default function App() {
 	return (
 		<>
@@ -30,7 +30,7 @@ export default function App() {
 					{/* Public*/}
 					<Route path="/" element={<Home />} />
 					<Route path="/forgotPassword" element={<ForgotPassword />} />
-					<Route path="/offers" element={<Offers />} />
+					<Route path="/offers" element={<OffersP />} />
 					<Route path="/category/:categoryName" element={<Category />} />
 					<Route
 						path="/category/:categoryName/:listingId"

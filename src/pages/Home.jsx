@@ -1,53 +1,46 @@
-// import {
-// 	collection,
-// 	getDoc,
-// 	getDocs,
-// 	limit,
-// 	orderBy,
-// 	query,
-// 	where,
-// } from "firebase/firestore";
 import { useEffect } from "react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
 import Slider from "../components/Slider";
-// import { db } from "../firebase";
-import * as client from "../Services/HomeService";
+
+import { Offers, Sales, Rents } from "../Services/Services";
 
 export default function Home() {
-	// Offers
 	const [offerListings, setOfferListings] = useState(null);
-	const [rentListings, setRentListings] = useState(null);
 	const [saleListings, setSaleListings] = useState(null);
+	const [rentListings, setRentListings] = useState(null);
 
 	useEffect(() => {
-		client.fetchOffers().then((list) => {
-			setOfferListings(list);
-		});
-		client.fetchRents().then((list) => {
-			setRentListings(list);
-		});
+		const resultOffers = Offers();
+		console.log(resultOffers);
+		resultOffers
+			.then((list) => {
+				setOfferListings(list);
+			})
+			.catch((error) => {
+				console.error("Error fetching offers:", error);
+			});
 
-		client.fetchSales().then((list) => {
-			setSaleListings(list);
-		});
+		const resultSales = Sales();
+		console.log(resultSales);
+		resultSales
+			.then((list) => {
+				setSaleListings(list);
+			})
+			.catch((error) => {
+				console.error("Error fetching offers:", error);
+			});
 
-		// client.fetchListings1().then((list) => {
-		// 	setOfferListings(list);
-		// });
-
-		// setTimeout(() => {
-		// 	client.fetchListings2().then((list) => {
-		// 		setRentListings(list);
-		// 	});
-		// }, 1000);
-
-		// setTimeout(() => {
-		// 	client.fetchListings3().then((list) => {
-		// 		setSaleListings(list);
-		// 	});
-		// }, 2000);
+		const resultRents = Rents();
+		console.log(resultRents);
+		resultRents
+			.then((list) => {
+				setRentListings(list);
+			})
+			.catch((error) => {
+				console.error("Error fetching offers:", error);
+			});
 	}, []);
 
 	return (

@@ -1,32 +1,24 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import {
-	collection,
-	getDocs,
-	limit,
-	orderBy,
-	query,
-	startAfter,
-	where,
-	previousDoc,
-} from "firebase/firestore";
-import { db } from "../firebase";
+
 import Spinner from "../components/Spinner";
 import ListingItem from "../components/ListingItem";
-import { async } from "@firebase/util";
-import * as client from "../Services/HomeService";
 
 import { useClient } from "../Services/useClient";
 
-export default function Offers() {
+import { Offers } from "../Services/Services";
+export default function OffersP() {
 	const [listings, setListings] = useState(null);
 	const [loading, setLoading] = useState(true);
-	const [lastFetchedListing, setLastFetchListing] = useState(null);
+	const [lastFetchedListing, setLastFetchListing] = useState(true);
 
 	const fetchListings = useClient();
 
 	useEffect(() => {
-		fetchListings(["offer", "==", true], 1).then((list) => {
+		fetchListings(["offer", "==", true], 4).then((list) => {
+			if (list.length === 0) {
+				setLastFetchListing(false);
+			}
 			console.log(list);
 			setListings(list);
 			setLoading(false);
@@ -34,39 +26,22 @@ export default function Offers() {
 	}, []);
 
 	useEffect(() => {
-		console.log("listings------------------");
-		console.log(listings);
+		Offers();
+		// console.log("listings------------------");
+		// console.log(listings);
 	}, [listings]);
 
 	async function onFetchMoreListings() {
 		try {
 			fetchListings(["offer", "==", true], 1).then((list) => {
-				console.log(list);
+				// console.log(list);
 				setListings([...listings, ...list]);
 				setLoading(false);
+
+				if (list.length === 0) {
+					setLastFetchListing(false);
+				}
 			});
-
-			// const listingRef = collection(db, "listings");
-			// const q = query(
-			// 	listingRef,
-			// 	where("offer", "==", true),
-			// 	orderBy("timestamp", "desc"),
-			// 	startAfter(lastFetchedListing),
-			// 	limit(4)
-			// );
-			// const querySnap = await getDocs(q);
-			// const lastVisible = querySnap.docs[querySnap.docs.length - 1];
-
-			// setLastFetchListing(lastVisible);
-			// const listings = [];
-			// querySnap.forEach((doc) => {
-			// 	return listings.push({
-			// 		id: doc.id,
-			// 		data: doc.data(),
-			// 	});
-			// });
-			// setListings((prevState) => [...prevState, ...listings]);
-			// setLoading(false);
 		} catch (error) {
 			toast.error("Could not fetch listing");
 		}
@@ -91,15 +66,15 @@ export default function Offers() {
 							))}
 						</ul>
 					</main>
-					{/* {lastFetchedLi1sting && ( */}
-					<div className="flex justify-center items-center">
-						<button
-							onClick={onFetchMoreListings}
-							className="bg-white px-3 py-1.5 text-gray-700 border border-gray-300 mb-6 mt-6 hover:border-slate-600 rounded transition duration-150 ease-in-out">
-							Load more
-						</button>
-					</div>
-					{/* )} */}
+					{lastFetchedListing && (
+						<div className="flex justify-center items-center">
+							<button
+								onClick={onFetchMoreListings}
+								className="bg-white px-3 py-1.5 text-gray-700 border border-gray-300 mb-6 mt-6 hover:border-slate-600 rounded transition duration-150 ease-in-out">
+								Load more
+							</button>
+						</div>
+					)}{" "}
 				</>
 			) : (
 				<p>There are no current offers</p>
