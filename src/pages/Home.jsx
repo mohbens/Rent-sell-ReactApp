@@ -3,17 +3,16 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import ListingItem from "../components/ListingItem";
 import Slider from "../components/Slider";
-
 import { Offers, Sales, Rents } from "../Services/Services";
+import { ListingsClient } from "../Services/useClient";
 
 export default function Home() {
 	const [offerListings, setOfferListings] = useState(null);
 	const [saleListings, setSaleListings] = useState(null);
 	const [rentListings, setRentListings] = useState(null);
-
+	const client = new ListingsClient();
 	useEffect(() => {
-		const resultOffers = Offers();
-		console.log(resultOffers);
+		const resultOffers = Offers(client);
 		resultOffers
 			.then((list) => {
 				setOfferListings(list);
@@ -22,8 +21,7 @@ export default function Home() {
 				console.error("Error fetching offers:", error);
 			});
 
-		const resultSales = Sales();
-		console.log(resultSales);
+		const resultSales = Sales(client);
 		resultSales
 			.then((list) => {
 				setSaleListings(list);
@@ -32,8 +30,7 @@ export default function Home() {
 				console.error("Error fetching offers:", error);
 			});
 
-		const resultRents = Rents();
-		console.log(resultRents);
+		const resultRents = Rents(client);
 		resultRents
 			.then((list) => {
 				setRentListings(list);

@@ -1,75 +1,61 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import {
-	collection,
-	getDocs,
-	limit,
-	orderBy,
-	query,
-	startAfter,
-	where,
-} from "firebase/firestore";
-import { db } from "../firebase";
 import Spinner from "../components/Spinner";
 import ListingItem from "../components/ListingItem";
 import { useParams } from "react-router-dom";
+import { Sales, Rents } from "../Services/Services";
+import { ListingsClient } from "../Services/useClient";
 
+const client = new ListingsClient();
 export default function Category() {
-	const [listings, setListings] = useState(null);
 	const [loading, setLoading] = useState(true);
-	const [lastFetchedListing, setLastFetchListing] = useState(null);
+	const [lastFetchedListing, setLastFetchListing] = useState(true);
+	const [rentListings, setRentListings] = useState(null);
+	const [saleListings, setSaleListings] = useState(null);
 	const params = useParams();
 	useEffect(() => {
-		async function fetchListings() {
-			try {
-				const listingRef = collection(db, "listings");
-				const q = query(
-					listingRef,
-					where("type", "==", params.categoryName),
-					orderBy("timestamp", "desc"),
-					limit(8)
-				);
-				const querySnap = await getDocs(q);
-				const lastVisible = querySnap.docs[querySnap.docs.length - 1];
-				setLastFetchListing(lastVisible);
-				const listings = [];
-				querySnap.forEach((doc) => {
-					return listings.push({
-						id: doc.id,
-						data: doc.data(),
-					});
+		if (params.categoryName === "rent") {
+			const resultRents = Rents(client);
+			resultRents
+				.then((list) => {
+					setRentListings(list);
+					setLoading(false);
+				})
+				.catch((error) => {
+					console.error("Error fetching offers:", error);
 				});
-				setListings(listings);
-				setLoading(false);
-			} catch (error) {
-				toast.error("Could not fetch listing");
-			}
+		} else if (params.categoryName === "sale") {
+			const resultSales = Sales(client);
+			resultSales
+				.then((list) => {
+					setSaleListings(list);
+					setLoading(false);
+				})
+				.catch((error) => {
+					console.error("Error fetching offers:", error);
+				});
 		}
-
-		fetchListings();
 	}, [params.categoryName]);
 
 	async function onFetchMoreListings() {
 		try {
-			const listingRef = collection(db, "listings");
-			const q = query(
-				listingRef,
-				where("type", "==", params.categoryName),
-				orderBy("timestamp", "desc"),
-				startAfter(lastFetchedListing),
-				limit(4)
-			);
-			const querySnap = await getDocs(q);
-			const lastVisible = querySnap.docs[querySnap.docs.length - 1];
-			setLastFetchListing(lastVisible);
-			const listings = [];
-			querySnap.forEach((doc) => {
-				return listings.push({
-					id: doc.id,
-					data: doc.data(),
+			const newListSales = Sales(client);
+			const newListRent = Rents(client);
+			if (params.categoryName === "rent") {
+				newListRent.then((list) => {
+					setRentListings((prevListings) => [...prevListings, ...list]);
+					if (list.length === 0) {
+						setLastFetchListing(false);
+					}
 				});
-			});
-			setListings((prevState) => [...prevState, ...listings]);
+			} else {
+				newListSales.then((list) => {
+					setSaleListings((prevListings) => [...prevListings, ...list]);
+					if (list.length === 0) {
+						setLastFetchListing(false);
+					}
+				});
+			}
 			setLoading(false);
 		} catch (error) {
 			toast.error("Could not fetch listing");
@@ -83,11 +69,38 @@ export default function Category() {
 			</h1>
 			{loading ? (
 				<Spinner />
-			) : listings && listings.length > 0 ? (
+			) : params.categoryName === "rent" &&
+			  rentListings &&
+			  rentListings.length > 0 ? (
 				<>
 					<main>
 						<ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-							{listings.map((listing) => (
+							{rentListings.map((listing) => (
+								<ListingItem
+									key={listing.id}
+									id={listing.id}
+									listing={listing.data}
+								/>
+							))}
+						</ul>
+					</main>
+					{lastFetchedListing && (
+						<div className="flex justify-center items-center">
+							<button
+								onClick={onFetchMoreListings}
+								className="bg-white px-3 py-1.5 text-gray-700 border border-gray-300 mb-6 mt-6 hover:border-slate-600 rounded transition duration-150 ease-in-out">
+								Load more
+							</button>
+						</div>
+					)}
+				</>
+			) : params.categoryName === "sale" &&
+			  saleListings &&
+			  saleListings.length > 0 ? (
+				<>
+					<main>
+						<ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+							{saleListings.map((listing) => (
 								<ListingItem
 									key={listing.id}
 									id={listing.id}
